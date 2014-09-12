@@ -31,11 +31,14 @@ class LoginView {
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
 	public function HTMLPage(){
 		$ret = "";
+		setlocale(LC_ALL, 'swedish');
+		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));
 
 		if($this->model->loginstatus() == false){
 			$ret = "<h2>Admin är inloggad</h2>
 					<p>Inloggning lyckades</p>
-					<a href='?logout'>Logga ut</a>";
+					<a href='?logout'>Logga ut</a>
+					<p>$Todaytime</p>";
 		}
 			else {
 				$ret = "<h2>Ej inloggad</h2>
@@ -50,7 +53,8 @@ class LoginView {
 							<input type=checkbox size=20>
 							<input type=submit name='Login' value='Logga in'>
 						</fieldset>
-					</form>";
+					</form>
+					<p>$Todaytime</p>";
 			}
 		return $ret;
 		
