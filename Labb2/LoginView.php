@@ -11,6 +11,7 @@ class LoginView {
 	public function getUsername(){
 		return $_POST["username"];
 	}
+	
 
 	//Hämtar ut lösenordet
 	public function getPassword(){
@@ -19,7 +20,7 @@ class LoginView {
 
 	//Kollar om man klickat på login knappen.
 	public function didUserPressLogin(){
-		if(isset($_POST["Login"])){
+		if(isset($_POST['Login'])){
 			return true;
 		}
 		else {
@@ -31,7 +32,7 @@ class LoginView {
 	public function HTMLPage(){
 		$ret = "";
 
-		if($this->model->Checklogin($this->getUsername(), $this->getPassword())){
+		if($this->model->loginstatus() == false){
 			$ret = "<h2>Admin är inloggad</h2>
 					<p>Inloggning lyckades</p>
 					<a href='?logout'>Logga ut</a>";
@@ -44,7 +45,7 @@ class LoginView {
 							<label>Användarnamn  :</label>
 							<input type=text size=20 name='username' id='UserNameID' value>
 							<label>Lösenord  :</label>
-							<input type=text size=20 name='password' id='PasswordID' value>
+							<input type=password size=20 name='password' id='PasswordID' value>
 							<label>Håll mig inloggad  :</label>
 							<input type=checkbox size=20>
 							<input type=submit name='Login' value='Logga in'>
