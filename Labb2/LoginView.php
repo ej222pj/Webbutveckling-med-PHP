@@ -34,7 +34,7 @@ class LoginView {
 		setlocale(LC_ALL, 'swedish');
 		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));
 
-		if($this->model->loginstatus() == false){
+		if($this->model->loginstatus()){
 			$ret = "<h2>Admin är inloggad</h2>
 					<p>Inloggning lyckades</p>
 					<a href='?logout'>Logga ut</a>
