@@ -28,6 +28,15 @@ class LoginView {
 		}
 	}
 
+	public function didUserPressLogout(){
+		if(isset($_GET['Logout'])){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
 	public function HTMLPage(){
 		$ret = "";

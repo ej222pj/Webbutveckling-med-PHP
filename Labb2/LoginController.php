@@ -21,6 +21,10 @@ class LoginController {
 			$this->model->Checklogin($username, $password);
 		}
 
+		if($this->view->didUserPressLogout()){
+			
+		}
+
 		return $this->view->HTMLPage();
 	}
 }
