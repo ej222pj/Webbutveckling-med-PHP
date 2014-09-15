@@ -9,13 +9,17 @@ class LoginView {
 
 	//Hämtar ut användarnamnet
 	public function getUsername(){
-		return $_POST["username"];
+		if(isset($_POST["username"])){
+			return $_POST["username"];
+		}
 	}
 	
 
 	//Hämtar ut lösenordet
 	public function getPassword(){
-		return $_POST["password"];
+		if(isset($_POST["password"])){
+			return $_POST["password"];
+		}
 	}
 
 	//Kollar om man klickat på login knappen.
@@ -29,7 +33,7 @@ class LoginView {
 	}
 
 	public function didUserPressLogout(){
-		if(isset($_GET['Logout'])){
+		if(isset($_POST['Logout'])){
 			return true;
 		}
 		else {
@@ -46,7 +50,9 @@ class LoginView {
 		if($this->model->loginstatus()){
 			$ret = "<h2>Admin är inloggad</h2>
 					<p>Inloggning lyckades</p>
-					<a href='?logout'>Logga ut</a>
+					<form method ='post'>
+						<input type=submit name='Logout' value='Logga ut'>
+					</form>
 					<p>$Todaytime</p>";
 		}
 			else {
@@ -64,6 +70,10 @@ class LoginView {
 						</fieldset>
 					</form>
 					<p>$Todaytime</p>";
+			}
+
+			if($this->didUserPressLogout()){
+				header('Location: ' . $_SERVER['PHP_SELF']);
 			}
 		return $ret;
 		

@@ -22,7 +22,7 @@ class LoginController {
 		}
 
 		if($this->view->didUserPressLogout()){
-			
+			$this->model->logout();
 		}
 
 		return $this->view->HTMLPage();

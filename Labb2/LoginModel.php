@@ -9,12 +9,16 @@ class LoginModel {
 
 	}
 
+	public function logout(){
+		session_destroy();
+	}
+
 	public function loginstatus(){
-		if($_SESSION["loginstatus"] == 0){
-			return false;
+		if(isset($_SESSION["loginstatus"])){
+			return true;
 		}
 		else{
-			return true;
+			return false;
 		}
 
 	}
@@ -27,7 +31,7 @@ class LoginModel {
 		}
 
 		if($username == $this->username && $password == $this->password){
-			$_SESSION["loginstatus"] = 1;
+			$_SESSION["loginstatus"] = $username;
 			return true;
 		}
 		else {
