@@ -5,7 +5,9 @@ require_once("CookieStorage.php");
 class LoginView {
 	private $model;
 	private $CookieMessage;
+	private $CookieOutput;
 	private $message;
+	private $value;
 
 	public function __construct(LoginModel $model) {
 		$this->model = $model;
@@ -18,7 +20,6 @@ class LoginView {
 			return $_POST["username"];
 		}
 	}
-	
 
 	//Hämtar ut lösenordet
 	public function getPassword(){
@@ -28,14 +29,20 @@ class LoginView {
 	}
 
 	//Kollar om man klickat på login knappen.
+	//Kollar om användaren skickar med input och skriver ut felmeddelanden.
 	public function didUserPressLogin(){
 		if(isset($_POST['Login'])){
 			if(($_POST["username"]) == ""){
 				$this->message = "Användarnamn saknas!";
 			}
 			if(($_POST["password"]) == "" && ($_POST["username"]) != "") {
+				$this->value = $_POST["username"];
 				$this->message = "Lösenord saknas!";
 			}
+			if(($_POST["password"]) != "" && ($_POST["username"]) != ""){
+				$this->value = $_POST["username"];
+			}
+
 			return true;
 		}
 		else {
@@ -43,6 +50,7 @@ class LoginView {
 		}
 	}
 
+	//Kollar om man klickat på logout knappen.
 	public function didUserPressLogout(){
 		if(isset($_POST['Logout'])){
 			return true;
@@ -53,7 +61,7 @@ class LoginView {
 	}
 
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
-	public function HTMLPage(){
+	public function HTMLPage($wrongInputMessage){
 		$ret = "";
 
 		setlocale(LC_ALL, 'swedish');
@@ -65,13 +73,12 @@ class LoginView {
 				header('Location: ' . $_SERVER['PHP_SELF']);
 			}
 			else {
-				$this->message = $this->CookieMessage->load();
+				$this->CookieOutput = $this->CookieMessage->load();
 			}
 
-
-
 			$ret = "<h2>Admin är inloggad</h2>
-			 		$this->message
+			 		<p>$this->message</p>
+			 		<p>$this->CookieOutput</p>
 					<form method ='post'>
 						<input type=submit name='Logout' value='Logga ut'>
 					</form>
@@ -80,28 +87,30 @@ class LoginView {
 		
 			if($this->model->loginstatus() == false) {
 				if($this->didUserPressLogout()){
-				$this->CookieMessage->save("Du är nu utloggad!");
-				header('Location: ' . $_SERVER['PHP_SELF']);
-			}
-			else {
-				$message = $this->CookieMessage->load();
-			}
+					$this->CookieMessage->save("Du är nu utloggad!");
+					header('Location: ' . $_SERVER['PHP_SELF']);
+				}
+				else {
+					$this->CookieOutput = $this->CookieMessage->load();
+				}
 
-				$ret = "<h2>Ej inloggad</h2>
+					$ret = "<h2>Ej inloggad</h2>
 						<form method='post'>
-						<fieldset>
-							$this->message
+							<fieldset>
+							<p>$this->message</p>
+							<p>$this->CookieOutput</p>
+							<p>$wrongInputMessage</p>
 							<legend>Login - Skriv in användarnamn och lösenord</legend>
 							<label>Användarnamn  :</label>
-							<input type=text size=20 name='username' id='UserNameID' value>
+							<input type=text size=20 name='username' id='UserNameID' value='$this->value'>
 							<label>Lösenord  :</label>
 							<input type=password size=20 name='password' id='PasswordID' value>
 							<label>Håll mig inloggad  :</label>
 							<input type=checkbox size=20>
 							<input type=submit name='Login' value='Logga in'>
-						</fieldset>
-					</form>
-					<p>$Todaytime</p>";
+							</fieldset>
+						</form>
+						<p>$Todaytime</p>";
 			}	
 		return $ret;
 		

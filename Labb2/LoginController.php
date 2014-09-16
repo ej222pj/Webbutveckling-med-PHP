@@ -14,18 +14,30 @@ class LoginController {
 
 	//Kollar om användaren vill logga in
 	public function doLogin() {
+
+		//Hämtar ut användarnamnet och lösenordet.
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();
+		$wrongInputMessage = "";
 
+		//Kollar om användaren vill logga in.
+		//Kollar så att det är rätt användarnamn och lösenord. Om inte, skicka felmeddelande.
 		if($this->view->didUserPressLogin()){
-			$this->model->Checklogin($username, $password);
+			if($username != "" && $password != ""){
+				if($this->model->Checklogin($username, $password) == false){
+					$wrongInputMessage = "Felaktigt användarnamn och/eller lösenord";
+				}
+			}
+			
 			
 		}
 
+		//Kollar om man klickat på logout knappen.
+		//Anropar logout funktionen som förstör sessionen.
 		if($this->view->didUserPressLogout()){
 			$this->model->logout();
 		}
 
-		return $this->view->HTMLPage();
+		return $this->view->HTMLPage($wrongInputMessage);
 	}
 }
