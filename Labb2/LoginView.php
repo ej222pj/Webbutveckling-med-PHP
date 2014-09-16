@@ -1,10 +1,15 @@
 <?php
 
+require_once("CookieStorage.php");
+
 class LoginView {
 	private $model;
+	private $CookieMessage;
+	private $message;
 
 	public function __construct(LoginModel $model) {
 		$this->model = $model;
+		$this->CookieMessage = new CookieStorage();
 	}
 
 	//Hämtar ut användarnamnet
@@ -25,6 +30,12 @@ class LoginView {
 	//Kollar om man klickat på login knappen.
 	public function didUserPressLogin(){
 		if(isset($_POST['Login'])){
+			if(($_POST["username"]) == ""){
+				$this->message = "Användarnamn saknas!";
+			}
+			if(($_POST["password"]) == "" && ($_POST["username"]) != "") {
+				$this->message = "Lösenord saknas!";
+			}
 			return true;
 		}
 		else {
@@ -44,21 +55,42 @@ class LoginView {
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
 	public function HTMLPage(){
 		$ret = "";
+
 		setlocale(LC_ALL, 'swedish');
-		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));
+		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));	
 
 		if($this->model->loginstatus()){
+			if($this->didUserPressLogin()){
+				$this->CookieMessage->save("Inloggningen lyckades!");
+				header('Location: ' . $_SERVER['PHP_SELF']);
+			}
+			else {
+				$this->message = $this->CookieMessage->load();
+			}
+
+
+
 			$ret = "<h2>Admin är inloggad</h2>
-					<p>Inloggning lyckades</p>
+			 		$this->message
 					<form method ='post'>
 						<input type=submit name='Logout' value='Logga ut'>
 					</form>
-					<p>$Todaytime</p>";
+					<p>$Todaytime</p>";			
 		}
+		
+			if($this->model->loginstatus() == false) {
+				if($this->didUserPressLogout()){
+				$this->CookieMessage->save("Du är nu utloggad!");
+				header('Location: ' . $_SERVER['PHP_SELF']);
+			}
 			else {
+				$message = $this->CookieMessage->load();
+			}
+
 				$ret = "<h2>Ej inloggad</h2>
 						<form method='post'>
 						<fieldset>
+							$this->message
 							<legend>Login - Skriv in användarnamn och lösenord</legend>
 							<label>Användarnamn  :</label>
 							<input type=text size=20 name='username' id='UserNameID' value>
@@ -70,11 +102,7 @@ class LoginView {
 						</fieldset>
 					</form>
 					<p>$Todaytime</p>";
-			}
-
-			if($this->didUserPressLogout()){
-				header('Location: ' . $_SERVER['PHP_SELF']);
-			}
+			}	
 		return $ret;
 		
 	}

@@ -10,6 +10,7 @@ class LoginModel {
 	}
 
 	public function logout(){
+		session_unset();
 		session_destroy();
 	}
 
@@ -25,11 +26,6 @@ class LoginModel {
 
 	//Kollar om det inmatade värdena ställer överens med rätt inlogg.
 	public function Checklogin($username, $password) {
-
-		if(isset($username) == false){
-			echo "Ange användarnamn!";
-		}
-
 		if($username == $this->username && $password == $this->password){
 			$_SESSION["loginstatus"] = $username;
 			return true;
