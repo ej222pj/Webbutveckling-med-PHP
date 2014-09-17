@@ -27,9 +27,12 @@ class LoginController {
 				if($this->model->Checklogin($username, $password) == false){
 					$wrongInputMessage = "Felaktigt användarnamn och/eller lösenord";
 				}
+				else {
+					if($this->view->Checkbox()){
+						$this->view->RememberMe();
+					}
+				}
 			}
-			
-			
 		}
 
 		//Kollar om man klickat på logout knappen.

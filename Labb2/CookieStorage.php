@@ -15,7 +15,7 @@ class CookieStorage {
 			$ret = "";
 		}
 		
-		setcookie($this->cookieName, "", time() -1);
+		//setcookie($this->cookieName, "", time() -1);
 
 		return $ret;
 	}
