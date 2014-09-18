@@ -128,7 +128,7 @@ class LoginView {
 					}
 				}else if($this->didUserPressLogout()){
 					$this->CookieMessage->save("Du är nu utloggad!");
-					header('Location: ' . $_SERVER['PHP_SELF']);
+					//header('Location: ' . $_SERVER['PHP_SELF']);
 				}
 				else{
 					$this->CookieOutput = $this->CookieMessage->load();
