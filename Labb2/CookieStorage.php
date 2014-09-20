@@ -2,7 +2,7 @@
 
 class CookieStorage {
 	private $cookieName = "CookieStorage";
-
+/*
 	public function save($string) {
 		setcookie($this->cookieName, $string, -1);
 	}
@@ -15,7 +15,23 @@ class CookieStorage {
 			$ret = "";
 		}
 		
-		//setcookie($this->cookieName, "", time() -1);
+		setcookie($this->cookieName, "", time() -1);
+
+		return $ret;
+	}
+	*/
+	
+
+	public function saveCookie($string){
+		setcookie($this->cookieName, $string, -1);
+
+		if (isset($_COOKIE[$this->cookieName])){
+			$ret = $_COOKIE[$this->cookieName];
+			setcookie($this->cookieName, "", time() -1);
+		}
+		else{
+			$ret = "";
+		}
 
 		return $ret;
 	}

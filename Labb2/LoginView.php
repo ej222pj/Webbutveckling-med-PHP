@@ -9,7 +9,6 @@ class LoginView {
 	private $message;
 	private $Uvalue = "";
 	private $Pvalue = "";
-	private $counter;
 
 	public function __construct(LoginModel $model) {
 		$this->model = $model;
@@ -55,7 +54,6 @@ class LoginView {
 			if(($_POST["password"]) != "" && ($_POST["username"]) != ""){
 				$this->Uvalue = $_POST["username"];
 			}
-			$this->counter = 0;
 			return true;
 		}
 		else {
@@ -81,21 +79,14 @@ class LoginView {
 		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));	
 
 		if($this->model->loginstatus()){
-			if($this->didUserPressLogin()){
 				if($this->Checkbox()){
-					$this->CookieMessage->save("Inloggning lyckades och vi kommer ihåg dig nästa gång!");
-					header('Location: ' . $_SERVER['PHP_SELF']);
+					$this->CookieOutput = $this->CookieMessage->saveCookie("Inloggning lyckades och vi kommer ihåg dig nästa gång!");
+					//header('Location: ' . $_SERVER['PHP_SELF']);					
 				}
-				else if($this->Checkbox() == false){
-					$this->CookieMessage->save("Inloggning lyckades!");
-					header('Location: ' . $_SERVER['PHP_SELF']);
+				else{
+					$this->CookieOutput = $this->CookieMessage->saveCookie("Inloggning lyckades!");
+					//header('Location: ' . $_SERVER['PHP_SELF']);
 				}
-
-			}
-			else{
-					$this->CookieOutput = $this->CookieMessage->load();
-				}
-			
 
 			$ret = "<h2>Admin är inloggad</h2>
 			 		<p>$this->CookieOutput</p>
@@ -106,17 +97,18 @@ class LoginView {
 		}
 		
 			if($this->model->loginstatus() == false) {
-				$this->Uvalue = $_COOKIE['Username'];
-				$this->Pvalue = $_COOKIE['Password'];
+				if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
+					$this->Uvalue = $_COOKIE['Username'];
+					$this->Pvalue = $_COOKIE['Password'];
+				}
 
 
 				if($this->didUserPressLogout() == false){
-					if(isset($_COOKIE['Username']) && isset($_COOKIE['Password']) && $this->counter == 0){
+					if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
 						if($this->model->Checklogin($_COOKIE['Username'], $_COOKIE["Password"])){
-							$this->counter = 1;
 
-							$this->CookieMessage->save("Inloggning lyckades via cookies!");
-							header('Location: ' . $_SERVER['PHP_SELF']);
+							$this->CookieOutput = $this->CookieMessage->saveCookie("Inloggning lyckades via cookies!");
+							//header('Location: ' . $_SERVER['PHP_SELF']);
 
 							$ret = "<h2>Admin är inloggad</h2>
 							 		<p>$this->CookieOutput</p>
@@ -124,15 +116,23 @@ class LoginView {
 										<input type=submit name='Logout' value='Logga ut'>
 									</form>
 									<p>$Todaytime</p>";
+						}else{
+							$this->CookieOutput = $this->CookieMessage->saveCookie("Felaktig information i cookie!");
 						}
-					}
+					}/*else{
+							$this->CookieMessage->save("Felaktig information i cookie!");
+						}
+						*/
 				}else if($this->didUserPressLogout()){
-					$this->CookieMessage->save("Du är nu utloggad!");
-					header('Location: ' . $_SERVER['PHP_SELF']);
+					$this->CookieOutput = $this->CookieMessage->saveCookie("Du är nu utloggad!");
+					//header('Location: ' . $_SERVER['PHP_SELF']);
 				}
+				/*
 				else{
 					$this->CookieOutput = $this->CookieMessage->load();
 				}	
+				$this->CookieOutput = $this->CookieMessage->load();
+				*/
 					
 					$ret = "<h2>Ej inloggad</h2>
 						<form method='post'>
