@@ -4,7 +4,6 @@ class LoginModel {
 
 	private $username = "hej";
 	private $password = "hej";
-	private $md5pass = "541c57960bb997942655d14e3b9607f9";
 	
 
 	public function __construct() {

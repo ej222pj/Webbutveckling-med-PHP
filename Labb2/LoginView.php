@@ -85,7 +85,7 @@ class LoginView {
 				}
 				else{
 					$this->CookieOutput = $this->CookieMessage->saveCookie("Inloggning lyckades!");
-					//header('Location: ' . $_SERVER['PHP_SELF']);
+					
 				}
 
 			$ret = "<h2>Admin är inloggad</h2>
@@ -93,7 +93,8 @@ class LoginView {
 					<form method ='post'>
 						<input type=submit name='Logout' value='Logga ut'>
 					</form>
-					<p>$Todaytime</p>";			
+					<p>$Todaytime</p>";
+					//header('Location: ' . $_SERVER['HTTP_REFERER']);
 		}
 		
 			if($this->model->loginstatus() == false) {
@@ -123,12 +124,8 @@ class LoginView {
 							$this->CookieMessage->save("Felaktig information i cookie!");
 						}
 						*/
-				}else if($this->didUserPressLogout()){
-<<<<<<< HEAD
+				}else{
 					$this->CookieOutput = $this->CookieMessage->saveCookie("Du är nu utloggad!");
-=======
-					$this->CookieMessage->save("Du är nu utloggad!");
->>>>>>> origin/master
 					//header('Location: ' . $_SERVER['PHP_SELF']);
 				}
 				/*
