@@ -30,6 +30,8 @@ class LoginController {
 				else {
 					if($this->view->Checkbox()){
 						$this->view->RememberMe();
+					}else{
+						$wrongInputMessage = "Inloggningen lyckades!";
 					}
 				}
 			}
