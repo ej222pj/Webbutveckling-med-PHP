@@ -10,12 +10,20 @@ class LoginView {
 		$this->model = $model;
 	}
 
+	//Sätter kakor
+	//Spara ner cookietiden i en fil
+	//Kryptera lösenordet
 	public function RememberMe(){
 		setcookie('Username', $_POST["username"], time()+60*60*24*30);
 		setcookie('Password', md5($_POST["password"]), time()+60*60*24*30);
+
+		$CookieTime = time()+60*60*24*30;
+		file_put_contents('CookieTime.txt', $CookieTime);
+
 		$this->message = "Inloggning lyckades och vi kommer ihåg dig nästa gång!";
 	}
 
+	//Kollar om kakan är satt.
 	public function isRemembered(){
 		if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
 			return true;
@@ -25,14 +33,17 @@ class LoginView {
 		}
 	}
 
+	//Hämta kaknamnet
 	public function getCookieUsername(){
 		return $_COOKIE['Username'];
 	}
 
+	//Hämtar kaklösenordet
 	public function getCookiePassword(){
 		return $_COOKIE['Password'];
 	}
 
+	//Kollar om anvnändaren klickat i håll mig inloggad rutan
 	public function Checkbox(){
 		if(isset($_POST['checkbox'])){
 			return true;
@@ -55,6 +66,7 @@ class LoginView {
 
 	//Kollar om man klickat på login knappen.
 	//Kollar om användaren skickar med input och skriver ut felmeddelanden.
+	//Sätter användanamnet till value på inmatningssträngen
 	public function didUserPressLogin(){
 		if(isset($_POST['Login'])){
 			if(($_POST["username"]) == ""){
@@ -74,12 +86,17 @@ class LoginView {
 		}
 	}
 
+	//Förstör kakorna.
+	public function removeCookie(){
+		setcookie ('Username', "", time() - 3600);
+		setcookie ('Password', "", time() - 3600);
+	}
+
 	//Kollar om man klickat på logout knappen.
 	public function didUserPressLogout(){
 		if(isset($_POST['Logout'])){
 			$this->message = "Du är nu utloggad!";
-			setcookie ('Username', "", time() - 3600);
-			setcookie ('Password', "", time() - 3600);
+			$this->removeCookie();
 			return true;
 		}
 		else {
@@ -88,16 +105,18 @@ class LoginView {
 	}
 
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
-	public function HTMLPage($wrongInputMessage){
+	public function HTMLPage($Message){
 		$ret = "";
 
 		setlocale(LC_ALL, 'swedish');
+		date_default_timezone_set('Europe/Stockholm');
 		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));	
 
 		if($this->model->loginstatus()){
-			$ret = "<h2>Admin är inloggad</h2>
+			$ret = "<h1>Laborationskod te222ds</h1>
+					<h2>Admin är inloggad</h2>
 			 		<p>$this->message</p>
-			 		<p>$wrongInputMessage</p>
+			 		<p>$Message</p>
 					<form method ='post'>
 						<input type=submit name='Logout' value='Logga ut'>
 					</form>
@@ -105,19 +124,21 @@ class LoginView {
 		}
 		
 			if($this->model->loginstatus() == false) {
-					$ret = "<h2>Ej inloggad</h2>
+					$ret = "
+						<h1>Laborationskod te222ds</h1>
+						<h2>Ej inloggad</h2>
 						<form method='post'>
 							<fieldset>
-							<p>$this->message</p>							
-							<p>$wrongInputMessage</p>
-							<legend>Login - Skriv in användarnamn och lösenord</legend>
-							<label>Användarnamn  :</label>
-							<input type=text size=20 name='username' id='UserNameID' value='$this->Uvalue'>
-							<label>Lösenord  :</label>
-							<input type=password size=20 name='password' id='PasswordID' value='$this->Pvalue'>
-							<label>Håll mig inloggad  :</label>
-							<input type=checkbox size=20 name='checkbox'>
-							<input type=submit name='Login' value='Logga in'>
+								<legend>Login - Skriv in användarnamn och lösenord</legend>
+								<p>$this->message</p>							
+								<p>$Message</p>
+								<label>Användarnamn  :</label>
+								<input type=text size=20 name='username' id='UserNameID' value='$this->Uvalue'>
+								<label>Lösenord  :</label>
+								<input type=password size=20 name='password' id='PasswordID' value='$this->Pvalue'>
+								<label>Håll mig inloggad  :</label>
+								<input type=checkbox name='checkbox'>
+								<input type=submit name='Login' value='Logga in'>
 							</fieldset>
 						</form>
 						<p>$Todaytime</p>";	

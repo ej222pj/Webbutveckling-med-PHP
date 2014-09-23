@@ -11,7 +11,6 @@ class HTMLView {
 					<title>Tims login</title>
 				</head>
 				<body>
-					<h1>Laborationskod te222ds</h1>
 					$body
 				</body>
 				</html>

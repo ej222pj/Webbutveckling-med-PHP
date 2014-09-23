@@ -1,5 +1,6 @@
 <?php
 
+//Starta en ny session
 session_start();
 
 require_once("HTMLView.php");

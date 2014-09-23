@@ -16,11 +16,13 @@ class LoginController {
 	public function doLogin() {
 		$Message = "";
 
+		//Inloggning via cookies
 		if($this->model->loginstatus() == false){
 			if($this->view->isRemembered()){
 				if($this->model->CheckloginWithCookie($this->view->getCookieUsername(), $this->view->getCookiePassword())){
 					$Message = "Inloggning lyckades via cookies!";
 				}else{
+					$this->view->removeCookie();
 					$Message = "Felaktig information i cookie!";
 				}
 			}
@@ -38,6 +40,7 @@ class LoginController {
 					$Message = "Felaktigt användarnamn och/eller lösenord";
 				}
 				else {
+					//Kollar om användaren vill hålla sig inloggd
 					if($this->view->Checkbox()){
 						$this->view->RememberMe();
 					}else{
