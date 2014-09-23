@@ -25,20 +25,19 @@ class LoginModel {
 
 	}
 
-	//Kollar om det inmatade värdena ställer överens med rätt inlogg.
-	public function Checklogin($username, $password) {
-
-		/*
-		if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
-			if ($_COOKIE['Username'] == $this->username && $_COOKIE['Password'] == $this->md5pass){
+	public function CheckloginWithCookie($username, $password){
+			if ($username == $this->username && $password == md5($this->password)){
+				$_SESSION["loginstatus"] = $username;
     			return true;
 			}
 			else{
 				return false;
 			}
-		}
-		*/
+	}
+	
 
+	//Kollar om det inmatade värdena ställer överens med rätt inlogg.
+	public function Checklogin($username, $password){
 		if($username == $this->username && $password == $this->password){
 			$_SESSION["loginstatus"] = $username;
 			return true;

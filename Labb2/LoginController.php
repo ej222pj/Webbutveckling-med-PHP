@@ -14,24 +14,34 @@ class LoginController {
 
 	//Kollar om användaren vill logga in
 	public function doLogin() {
+		$Message = "";
+
+		if($this->model->loginstatus() == false){
+			if($this->view->isRemembered()){
+				if($this->model->CheckloginWithCookie($this->view->getCookieUsername(), $this->view->getCookiePassword())){
+					$Message = "Inloggning lyckades via cookies!";
+				}else{
+					$Message = "Felaktig information i cookie!";
+				}
+			}
+		}
 
 		//Hämtar ut användarnamnet och lösenordet.
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();
-		$wrongInputMessage = "";
 
 		//Kollar om användaren vill logga in.
 		//Kollar så att det är rätt användarnamn och lösenord. Om inte, skicka felmeddelande.
 		if($this->view->didUserPressLogin()){
 			if($username != "" && $password != ""){
 				if($this->model->Checklogin($username, $password) == false){
-					$wrongInputMessage = "Felaktigt användarnamn och/eller lösenord";
+					$Message = "Felaktigt användarnamn och/eller lösenord";
 				}
 				else {
 					if($this->view->Checkbox()){
 						$this->view->RememberMe();
 					}else{
-						$wrongInputMessage = "Inloggningen lyckades!";
+						$Message = "Inloggningen lyckades!";
 					}
 				}
 			}
@@ -43,6 +53,6 @@ class LoginController {
 			$this->model->logout();
 		}
 
-		return $this->view->HTMLPage($wrongInputMessage);
+		return $this->view->HTMLPage($Message);
 	}
 }

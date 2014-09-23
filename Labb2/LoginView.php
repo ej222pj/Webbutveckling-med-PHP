@@ -12,8 +12,25 @@ class LoginView {
 
 	public function RememberMe(){
 		setcookie('Username', $_POST["username"], time()+60*60*24*30);
-		setcookie('Password', $_POST["password"], time()+60*60*24*30);
+		setcookie('Password', md5($_POST["password"]), time()+60*60*24*30);
 		$this->message = "Inloggning lyckades och vi kommer ihåg dig nästa gång!";
+	}
+
+	public function isRemembered(){
+		if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public function getCookieUsername(){
+		return $_COOKIE['Username'];
+	}
+
+	public function getCookiePassword(){
+		return $_COOKIE['Password'];
 	}
 
 	public function Checkbox(){
@@ -61,6 +78,8 @@ class LoginView {
 	public function didUserPressLogout(){
 		if(isset($_POST['Logout'])){
 			$this->message = "Du är nu utloggad!";
+			setcookie ('Username', "", time() - 3600);
+			setcookie ('Password', "", time() - 3600);
 			return true;
 		}
 		else {
@@ -86,30 +105,6 @@ class LoginView {
 		}
 		
 			if($this->model->loginstatus() == false) {
-				if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
-					$this->Uvalue = $_COOKIE['Username'];
-					$this->Pvalue = $_COOKIE['Password'];
-				}
-
-
-				if($this->didUserPressLogout() == false){
-					if(isset($_COOKIE['Username']) && isset($_COOKIE['Password'])){
-						if($this->model->Checklogin($_COOKIE['Username'], $_COOKIE["Password"])){
-
-							$this->message = "Inloggning lyckades via cookies!";
-
-							$ret = "<h2>Admin är inloggad</h2>
-							 		<p>$this->message</p>
-									<form method ='post'>
-										<input type=submit name='Logout' value='Logga ut'>
-									</form>
-									<p>$Todaytime</p>";
-						}else{
-							$this->message = "Felaktig information i cookie!";
-						}
-					}
-				}
-				if($this->message != "Inloggning lyckades via cookies!"){
 					$ret = "<h2>Ej inloggad</h2>
 						<form method='post'>
 							<fieldset>
@@ -125,8 +120,7 @@ class LoginView {
 							<input type=submit name='Login' value='Logga in'>
 							</fieldset>
 						</form>
-						<p>$Todaytime</p>";
-				}	
+						<p>$Todaytime</p>";	
 			}	
 		return $ret;
 		
