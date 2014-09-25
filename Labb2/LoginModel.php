@@ -17,10 +17,7 @@ class LoginModel {
 	}
 	
 	public function registerUser(){
-		
 		return true;
-		
-		return false;
 	}
 
 	//Kollar om sessionen är satt och retunera ture om användaren är inloggad

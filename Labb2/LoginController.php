@@ -2,17 +2,17 @@
 
 require_once("LoginModel.php");
 require_once("LoginView.php");
-//require_once("RegisterView.php");
+require_once("RegisterView.php");
 
 class LoginController {
 	private $view;
-	//private $registerView;
+	private $registerView;
 	private $model;
 
 	public function __construct() {
 		$this->model = new LoginModel();
 		$this->view = new LoginView($this->model);
-		//$this->registerView = new RegisterView($this->model);
+		$this->registerView = new RegisterView($this->model);
 	}
 
 	//Kollar om användaren vill logga in
@@ -32,10 +32,9 @@ class LoginController {
 		}
 		
 		//Registrera ny användare
-		if($this->view->didUserPressRegister()){
-			$Message = "Registrera fö fan!";
-		
-			return $this->view->registerPage($Message);
+		//Öppnar registerpage viewn
+		if($this->registerView->didUserPressRegister()){
+			return $this->registerView->registerPage();
 		}
 
 		//Hämtar ut användarnamnet och lösenordet.
