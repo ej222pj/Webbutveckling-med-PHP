@@ -5,6 +5,9 @@ class LoginView {
 	private $message;
 	private $Uvalue = "";
 	private $Pvalue = "";
+	private $RegUvalue = "";
+	private $RegPvalue = "";
+	private $RepRegPvalue = "";
 
 	public function __construct(LoginModel $model) {
 		$this->model = $model;
@@ -103,6 +106,15 @@ class LoginView {
 			return false;
 		}
 	}
+	
+	public function didUserPressRegister(){
+		if(isset($_POST['Register'])){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
 	public function HTMLPage($Message){
@@ -111,9 +123,33 @@ class LoginView {
 		setlocale(LC_ALL, 'swedish');
 		date_default_timezone_set('Europe/Stockholm');
 		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));	
+		
+		if($this->model->registerUser()){
+			$ret = "<h1>Laborationskod ej222pj</h1>
+				<form method ='post'>
+						<input type=submit name='Logout' value='Logga ut'>
+				</form>
+				<h2>Ej Inloggad, Registrerar användare</h2>
+					<form method='post'>
+						<fieldset>
+							<legend>Login - Skriv in användarnamn och lösenord</legend>
+							<p>$this->message</p>							
+							<p>$Message</p>
+							<label>Namn:</label>
+							<input type=text size=20 name='regusername' id='regUserNameID' value='$this->RegUvalue'>
+							<label>Lösenord:</label>
+							<input type=password size=20 name='regpassword' id='regPasswordID' value='$this->RegPvalue'>
+							<label>Repetera Lösenord:</label>
+							<input type=password size=20 name='repregpassword' id='repregPasswordID' value='$this->RepRegPvalue'>
+							<input type=submit name='Register' value='Registrera'>
+						</fieldset>
+					</form>
+				<p>$Todaytime</p>";	
+		 	return $ret;
+		}
 
 		if($this->model->loginstatus()){
-			$ret = "<h1>Laborationskod te222ds</h1>
+			$ret = "<h1>Laborationskod ej222pj</h1>
 					<h2>Admin är inloggad</h2>
 			 		<p>$this->message</p>
 			 		<p>$Message</p>
@@ -121,29 +157,35 @@ class LoginView {
 						<input type=submit name='Logout' value='Logga ut'>
 					</form>
 					<p>$Todaytime</p>";
+					return $ret;
 		}
 		
-			if($this->model->loginstatus() == false) {
-					$ret = "
-						<h1>Laborationskod te222ds</h1>
-						<h2>Ej inloggad</h2>
-						<form method='post'>
-							<fieldset>
-								<legend>Login - Skriv in användarnamn och lösenord</legend>
-								<p>$this->message</p>							
-								<p>$Message</p>
-								<label>Användarnamn  :</label>
-								<input type=text size=20 name='username' id='UserNameID' value='$this->Uvalue'>
-								<label>Lösenord  :</label>
-								<input type=password size=20 name='password' id='PasswordID' value='$this->Pvalue'>
-								<label>Håll mig inloggad  :</label>
-								<input type=checkbox name='checkbox'>
-								<input type=submit name='Login' value='Logga in'>
-							</fieldset>
-						</form>
-						<p>$Todaytime</p>";	
-			}	
-		return $ret;
+		if($this->model->loginstatus() == false) {
+				$ret = "
+					<h1>Laborationskod ej222pj</h1>
+					<form method ='post'>
+						<input type=submit name='Register' value='Registrera ny användare'>
+					</form>
+					<h2>Ej inloggad</h2>
+					<form method='post'>
+						<fieldset>
+							<legend>Login - Skriv in användarnamn och lösenord</legend>
+							<p>$this->message</p>							
+							<p>$Message</p>
+							<label>Användarnamn:</label>
+							<input type=text size=20 name='username' id='UserNameID' value='$this->Uvalue'>
+							<label>Lösenord:</label>
+							<input type=password size=20 name='password' id='PasswordID' value='$this->Pvalue'>
+							<label>Håll mig inloggad  :</label>
+							<input type=checkbox name='checkbox'>
+							<input type=submit name='Login' value='Logga in'>
+						</fieldset>
+					</form>
+					<p>$Todaytime</p>";	
+					return $ret;
+		}	
+		
+		//return $ret;
 		
 	}
 }
