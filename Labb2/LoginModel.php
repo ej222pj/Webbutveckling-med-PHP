@@ -15,6 +15,12 @@ class LoginModel {
 		session_unset();
 		session_destroy();
 	}
+	
+	public function registerUser(){
+		
+		return true;
+		
+	}
 
 	//Kollar om sessionen är satt och retunera ture om användaren är inloggad
 	//Kollar även om användaren försöker att logga in med fake session.

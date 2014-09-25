@@ -2,20 +2,23 @@
 
 require_once("LoginModel.php");
 require_once("LoginView.php");
+//require_once("RegisterView.php");
 
 class LoginController {
 	private $view;
+	//private $registerView;
 	private $model;
 
 	public function __construct() {
 		$this->model = new LoginModel();
 		$this->view = new LoginView($this->model);
+		//$this->registerView = new RegisterView($this->model);
 	}
 
 	//Kollar om användaren vill logga in
 	public function doLogin() {
 		$Message = "";
-
+		
 		//Inloggning via cookies
 		if($this->model->loginstatus() == false){
 			if($this->view->isRemembered()){
@@ -25,6 +28,13 @@ class LoginController {
 					$this->view->removeCookie();
 					$Message = "Felaktig information i cookie!";
 				}
+			}
+		}
+		
+		//Registrera ny användare
+		if($this->view->didUserPressRegister()){
+			if($this->model->registerUser()){
+			$Message = "Registrera fö fan!";
 			}
 		}
 
