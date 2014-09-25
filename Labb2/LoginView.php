@@ -115,9 +115,18 @@ class LoginView {
 			return false;
 		}
 	}
+	
+	public function didUserPressBack(){
+		if(isset($_POST['back'])){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
-	public function HTMLPage($Message){
+	public function registerPage($Message){
 		$ret = "";
 
 		setlocale(LC_ALL, 'swedish');
@@ -127,7 +136,7 @@ class LoginView {
 		if($this->model->registerUser()){
 			$ret = "<h1>Laborationskod ej222pj</h1>
 				<form method ='post'>
-						<input type=submit name='Logout' value='Logga ut'>
+						<input type=submit name='back' value='Tillbaka'>
 				</form>
 				<h2>Ej Inloggad, Registrerar användare</h2>
 					<form method='post'>
@@ -147,6 +156,13 @@ class LoginView {
 				<p>$Todaytime</p>";	
 		 	return $ret;
 		}
+	}
+	public function HTMLPage($Message){
+		$ret = "";
+
+		setlocale(LC_ALL, 'swedish');
+		date_default_timezone_set('Europe/Stockholm');
+		$Todaytime = ucwords(strftime("%A,den %d %B år %Y. Klockan är [%H:%M:%S]."));	
 
 		if($this->model->loginstatus()){
 			$ret = "<h1>Laborationskod ej222pj</h1>

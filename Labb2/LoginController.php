@@ -33,9 +33,9 @@ class LoginController {
 		
 		//Registrera ny användare
 		if($this->view->didUserPressRegister()){
-			if($this->model->registerUser()){
 			$Message = "Registrera fö fan!";
-			}
+		
+			return $this->view->registerPage($Message);
 		}
 
 		//Hämtar ut användarnamnet och lösenordet.
