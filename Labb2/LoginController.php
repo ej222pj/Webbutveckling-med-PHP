@@ -31,7 +31,19 @@ class LoginController {
 			}
 		}
 		
+		$regusername = $this->registerView->getUsername();
+		$regpassword = $this->registerView->getPassword();
+		$repregpassword = $this->registerView->getRepPassword();
+		
 		if($this->registerView->didUserPressRegisterNew()){
+			if($regusername != "" && $regpassword != ""){
+				if($this->model->CheckRegisterNew($regusername) == false){
+					$Message = "Användarnamnet är upptaget";
+				}
+				else{
+					$Message = "Registrering av ny användare lyckades";
+				}
+			}
 			return $this->registerView->registerPage($Message);
 		}
 		//Registrera ny användare

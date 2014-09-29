@@ -11,6 +11,26 @@
 		$this->model = $model;
 	}
 	
+	//Hämtar användarnamnet
+	public function getUsername(){
+		if(isset($_POST["regusername"])){
+			return $_POST["regusername"];
+		}
+	}
+
+	//Hämtar ut lösenordet
+	public function getPassword(){
+		if(isset($_POST["regpassword"])){
+			return $_POST["regpassword"];
+		}
+	}
+	
+	public function getRepPassword(){
+		if(isset($_POST["repregpassword"])){
+			return $_POST["repregpassword"];
+		}
+	}
+	
 	public function didUserPressRegister(){
 		if(isset($_POST['Register'])){
 			return true;
@@ -29,9 +49,9 @@
 				$this->$RegUvalue = $_POST["regusername"];
 				$this->message = "Lösenord saknas!";
 			}
-			if(($_POST["regpassword"]) != "" && ($_POST["regusername"]) != ""){
-				$this->$RegUvalue = $_POST["regusername"];
-			}
+			// if(($_POST["regpassword"]) != "" && ($_POST["regusername"]) != ""){
+				// $this->$RegUvalue = $_POST["regusername"];
+			// }
 			return true;
 		}
 		else{

@@ -17,7 +17,18 @@ class LoginModel {
 	}
 	
 	public function registerUser(){
+		$_SESSION["registerstatus"] = true;
+			
 		return true;
+	}
+	
+	public function CheckRegisterNew($regusername){
+		if($this->username == $regusername){
+			return false;
+		}
+		else{
+			return true;
+		}
 	}
 
 	//Kollar om sessionen är satt och retunera ture om användaren är inloggad
