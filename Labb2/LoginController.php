@@ -31,12 +31,16 @@ class LoginController {
 			}
 		}
 		
+		if($this->registerView->didUserPressRegisterNew()){
+			return $this->registerView->registerPage($Message);
+		}
 		//Registrera ny användare
 		//Öppnar registerpage viewn
 		if($this->registerView->didUserPressRegister()){
-			return $this->registerView->registerPage();
+			return $this->registerView->registerPage($Message);
 		}
-
+		
+		
 		//Hämtar ut användarnamnet och lösenordet.
 		$username = $this->view->getUsername();
 		$password = $this->view->getPassword();

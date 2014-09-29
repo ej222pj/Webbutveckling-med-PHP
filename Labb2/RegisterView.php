@@ -3,6 +3,7 @@
 
     class RegisterView {
 	private $model;
+	private $message;
 	private $RegUvalue = "";
 	private $RegPvalue = "";
 	private $RepRegPvalue = "";
@@ -18,9 +19,28 @@
 			return false;
 		}
 	}
+	
+	public function didUserPressRegisterNew(){
+		if(isset($_POST['RegisterNew'])){
+			if(($_POST["regusername"]) == "" && ($_POST["regpassword"]) == ""){
+				$this->message = "Användarnamnet har för få tecken. Minst 3 tecken\nLösenordet har för få tecken. Minst 6 tecken";
+			}
+			if(($_POST["regpassword"]) == "" && ($_POST["regusername"]) != "") {
+				$this->$RegUvalue = $_POST["regusername"];
+				$this->message = "Lösenord saknas!";
+			}
+			if(($_POST["regpassword"]) != "" && ($_POST["regusername"]) != ""){
+				$this->$RegUvalue = $_POST["regusername"];
+			}
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
 	//Skriver ut HTMLkod efter om användaren vill registrera.
-	public function registerPage(){
+	public function registerPage($Message){
 		$ret = "";
 
 		setlocale(LC_ALL, 'swedish');
@@ -36,13 +56,15 @@
 					<form method='post'>
 						<fieldset>
 							<legend>Login - Skriv in användarnamn och lösenord</legend>
+							<p>$this->message</p>							
+							<p>$Message</p>
 							<label>Namn:</label>
 							<input type=text size=20 name='regusername' id='regUserNameID' value='$this->RegUvalue'>
 							<label>Lösenord:</label>
 							<input type=password size=20 name='regpassword' id='regPasswordID' value='$this->RegPvalue'>
 							<label>Repetera Lösenord:</label>
 							<input type=password size=20 name='repregpassword' id='repregPasswordID' value='$this->RepRegPvalue'>
-							<input type=submit name='Register' value='Registrera'>
+							<input type=submit name='RegisterNew' value='Registrera'>
 						</fieldset>
 					</form>
 				<p>$Todaytime</p>";	
