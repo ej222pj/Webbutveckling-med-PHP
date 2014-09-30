@@ -9,6 +9,8 @@ class LoginController {
 	private $registerView;
 	private $model;
 
+	
+	
 	public function __construct() {
 		$this->model = new LoginModel();
 		$this->view = new LoginView($this->model);
@@ -37,11 +39,13 @@ class LoginController {
 		
 		if($this->registerView->didUserPressRegisterNew()){
 			if($regusername != "" && $regpassword != ""){
-				if($this->model->CheckRegisterNew($regusername) == false){
-					$Message = "Användarnamnet är upptaget";
+				if($this->model->CheckRegisterNew($regusername)){
+					if($this->model->addUser($regusername, $regpassword)){
+						$Message = "Registrering av ny användare lyckades";				
+					}
 				}
 				else{
-					$Message = "Registrering av ny användare lyckades";
+					$Message = "Användarnamnet är upptaget";
 				}
 			}
 			return $this->registerView->registerPage($Message);
