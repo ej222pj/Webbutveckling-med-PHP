@@ -21,7 +21,7 @@ class LoginModel {
 			
 		return true;
 	}
-	
+	//Kollar mot datorbasen om en användare finns
 	public function CheckRegisterNew($regusername){
 		if($this->username !== $regusername){
 			return true;

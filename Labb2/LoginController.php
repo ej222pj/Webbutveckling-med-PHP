@@ -38,7 +38,7 @@ class LoginController {
 		$repregpassword = $this->registerView->getRepPassword();
 		
 		if($this->registerView->didUserPressRegisterNew()){
-			if($regusername != "" && $regpassword != ""){
+			if(strlen($regusername) > 2 && strlen($regpassword) > 5 && $repregpassword == $regpassword){
 				if($this->model->CheckRegisterNew($regusername)){
 					if($this->model->addUser($regusername, $regpassword)){
 						$Message = "Registrering av ny användare lyckades";				
