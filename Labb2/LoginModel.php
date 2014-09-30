@@ -6,13 +6,6 @@ class LoginModel {
 	private $username = "Admin";
 	private $password = "Password";
 	
-	// public $user_name = "root";
-	// public $pass = "";
-	// public $database = "newmember";
-	// public $server = "mysql:host=127.0.0.1;dbname=newmember";
-	
-	
-
 	public function __construct() {
 
 	}
@@ -78,20 +71,21 @@ class LoginModel {
 	}
 	
 	public function addUser($regusername, $regpassword){
-		//try{
-			//$db = $this->connection();
+		try{
 			$con=mysqli_connect("127.0.0.1","root","","newmember");
 			// Check connection
 			if (mysqli_connect_errno()) {
 			  echo "Failed to connect to MySQL: " . mysqli_connect_error();
 			}
 			
-			mysqli_query($con,"INSERT INTO register (name, password)
+			mysqli_query($con,"INSERT INTO registernew (name, password)
 			VALUES ('$regusername', '$regpassword')");
 			
 			mysqli_close($con);
 			return true;
-						
-
+		}
+		catch(\Exception $e){
+			throw new \Exception("Something went wrong with the database!");
+		}
 	}
 }
