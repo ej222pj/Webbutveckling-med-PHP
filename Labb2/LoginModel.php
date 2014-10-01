@@ -3,8 +3,8 @@ require_once ('Repository.php');
 
 class LoginModel {
 
-	private $username = "Admin";
-	private $password = "Password";
+	//private $username = "Admin";
+	//private $password = "Password";
 	private $Repository;
 	
 	public function __construct() {
@@ -61,6 +61,7 @@ class LoginModel {
 
 	//Kollar om det inmatade värdena ställer överens med rätt inlogg.
 	public function Checklogin($username, $password){
+		
 		if($username == $this->username && $password == $this->password){
 			$_SESSION["loginstatus"] = $username;
 			$_SESSION["browserstatus"] = $_SERVER['HTTP_USER_AGENT'];
@@ -91,7 +92,7 @@ class LoginModel {
 		try{
 			$db = $this->Repository->connection();
 			
-			$sql = "SELECT * FROM registernew WHERE name = ?";// . $regusername;
+			$sql = "SELECT * FROM registernew WHERE name = ?";
 			$params = array($regusername);
 			$query = $db -> prepare($sql);
 			$query -> execute($params);

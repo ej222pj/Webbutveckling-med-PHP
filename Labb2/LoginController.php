@@ -45,8 +45,8 @@ class LoginController {
 					}
 				}
 				else{
-					
-					$Message = "Användarnamnet är upptaget";
+					$this->registerView->setUsername($regusername);
+					$Message = "Användarnamnet är redan upptaget";
 				}
 			}
 			return $this->registerView->registerPage($Message);

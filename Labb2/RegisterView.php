@@ -15,8 +15,31 @@ class RegisterView {
 	//Hämtar användarnamnet
 	public function getUsername(){
 		if(isset($_POST["regusername"])){
-			return $_POST["regusername"];
+			 if($_POST["regusername"] !== $this->cleanInput($_POST["regusername"])){
+			 	$this->message = "Användarnamnet innehåller ogiltiga tecken";
+			 	$this->RegUvalue = $this->cleanInput($_POST["regusername"]);
+			 }
+			 else{
+			 	return $this->cleanInput($_POST["regusername"]);
+			 }
 		}
+	}
+	
+	//FILTER_SANITIZE_STRING
+	//FILTER_FLAG_STRIP_LOW
+	//This filter removes data that is potentially harmful for your application. 
+	//It is used to strip tags and remove or encode unwanted characters.
+	//Inte helt 100% på vad strip_low gör men hittade på Stackoverflow och de funkar.
+	public function cleanInput($username){
+		$clean = trim($username);
+		$superClean = filter_var($clean, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+		
+		return $superClean;
+	}
+	
+	public function setUsername($username){
+		$ret = $this->RegUvalue = $username;
+		return $ret;
 	}
 
 	//Hämtar ut lösenordet
@@ -59,7 +82,7 @@ class RegisterView {
 			elseif(($_POST["repregpassword"]) !== ($_POST["regpassword"])) {
 				$this->RegUvalue = $_POST["regusername"];
 				//$this->RegPvalue = $_POST["regpassword"]; Väljer att ta bort lösenordet
-				$this->message = "Repetera lösenord måste vara samma som lösenordet";
+				$this->message = "Lösenorden matchar inte";
 			}
 			return true;
 		}
