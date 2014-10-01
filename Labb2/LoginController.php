@@ -39,12 +39,13 @@ class LoginController {
 		
 		if($this->registerView->didUserPressRegisterNew()){
 			if(strlen($regusername) > 2 && strlen($regpassword) > 5 && $repregpassword == $regpassword){
-				if($this->model->CheckRegisterNew($regusername)){
+				if($this->model->compareUsername($regusername)){
 					if($this->model->addUser($regusername, $regpassword)){
 						$Message = "Registrering av ny användare lyckades";				
 					}
 				}
 				else{
+					
 					$Message = "Användarnamnet är upptaget";
 				}
 			}

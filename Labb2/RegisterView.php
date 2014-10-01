@@ -1,7 +1,7 @@
 <?php
 
 
-    class RegisterView {
+class RegisterView {
 	private $model;
 	private $message;
 	private $RegUvalue = "";

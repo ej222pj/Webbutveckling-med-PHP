@@ -5,9 +5,10 @@ class LoginModel {
 
 	private $username = "Admin";
 	private $password = "Password";
+	private $Repository;
 	
 	public function __construct() {
-
+		$this->Repository = new Repository();
 	}
 
 	//Förstör sessionen.
@@ -72,20 +73,44 @@ class LoginModel {
 	
 	public function addUser($regusername, $regpassword){
 		try{
-			$con=mysqli_connect("127.0.0.1","root","","newmember");
-			// Check connection
-			if (mysqli_connect_errno()) {
-			  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-			}
-			
-			mysqli_query($con,"INSERT INTO registernew (name, password)
-			VALUES ('$regusername', '$regpassword')");
-			
-			mysqli_close($con);
+			$db = $this->Repository->connection();
+	
+			$sql = "INSERT INTO registernew (name, password) VALUES (?, ?)";
+			$params = array($regusername, $regpassword);
+	
+			$query = $db->prepare($sql);
+			$query->execute($params);
 			return true;
 		}
 		catch(\Exception $e){
-			throw new \Exception("Something went wrong with the database!");
+			throw new \Exception("Databas error, troligtvis finns användaren tills jag fixat en check på det!");
 		}
 	}
+	
+	public function compareUsername($regusername){
+		try{
+			$db = $this->Repository->connection();
+			
+			$sql = "SELECT * FROM registernew WHERE name = ?";// . $regusername;
+			$params = array($regusername);
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+
+			$result = $query -> fetch();
+			//var_dump($result);
+			if($result == false){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		catch(\Exception $e){
+			throw new \Exception("Databas error, kollar om användaren finns!");
+		}
+	}
+	
+	
+	
+	
 }

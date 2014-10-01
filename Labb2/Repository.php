@@ -1,19 +1,21 @@
 <?php
 
-abstract class Repository{
+class Repository {
+	//protected $dbUsername = \Settings::$DBUSERNAME;
 	
-	protected $dbUsername = "root";
-	protected $dbPassword = "";
-	protected $dbConnstring = 'mysql:host=127.0.0.1;dbname=newmember';
-	protected $dbTable = "register";
+	private $dbConnection;
+	private $dbTable;
+	private static $DB_USERNAME = "root";
+	private static $DB_PASSWORD = '';
+	private static $DB_CONNECTION = 'mysql:host=127.0.0.1;dbname=newmember';
 	
-	protected $pdo;
-	 
-	public function __construct(){
-		$this->pdo = self::connect(); 
+	public function connection() {
+		if ($this->dbConnection == NULL)
+			$this->dbConnection = new \PDO(self::$DB_CONNECTION, self::$DB_USERNAME, self::$DB_PASSWORD);
+		
+		$this->dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+		
+		return $this->dbConnection;
 	}
 
-	protected static function connect(){
-		return new \PDO(self::$dbConnstring, self::$dbUsername, self::$dbPassword);
-	} 
 }
