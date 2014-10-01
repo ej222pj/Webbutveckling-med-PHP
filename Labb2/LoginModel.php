@@ -61,7 +61,8 @@ class LoginModel {
 
 	//Kollar om det inmatade värdena ställer överens med rätt inlogg.
 	public function Checklogin($username, $password){
-		
+		//ANVÄND DETTA PÅ NÅTT SÄTT!	
+		//SELECT * FROM `registernew` WHERE name='Admin'
 		if($username == $this->username && $password == $this->password){
 			$_SESSION["loginstatus"] = $username;
 			$_SESSION["browserstatus"] = $_SERVER['HTTP_USER_AGENT'];
