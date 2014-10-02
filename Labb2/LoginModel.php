@@ -45,7 +45,16 @@ class LoginModel {
 	public function CheckloginWithCookie($username, $password){
 		$CookieTime = file_get_contents('CookieTime.txt');
 
-		if ($username == $this->username && $password == md5($this->password) && $CookieTime > time()){
+		$db = $this->Repository->connection();
+			
+			$sql = "SELECT * FROM registernew WHERE name = ?";
+			$params = array($username);
+			
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+			$result = $query -> fetch();
+
+		if ($username == $result['name'] && $password == md5($result['password']) && $CookieTime > time()){
 			$_SESSION["loginstatus"] = $username;
 			$_SESSION["browserstatus"] = $_SERVER['HTTP_USER_AGENT'];
 			return true;

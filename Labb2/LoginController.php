@@ -23,6 +23,7 @@ class LoginController {
 		if($this->model->loginstatus() == false){
 			if($this->view->isRemembered()){
 				if($this->model->CheckloginWithCookie($this->view->getCookieUsername(), $this->view->getCookiePassword())){
+					$this->view->setUser($this->view->getCookieUsername());	
 					$Message = "Inloggning lyckades via cookies!";
 				}else{
 					$this->view->removeCookie();
