@@ -3,14 +3,12 @@ require_once ('Repository.php');
 
 class LoginModel {
 
-	//private $username = "Admin";
-	//private $password = "Password";
 	private $Repository;
 	
 	public function __construct() {
 		$this->Repository = new Repository();
 	}
-
+	
 	//Förstör sessionen.
 	public function logout(){
 		session_unset();
@@ -41,7 +39,6 @@ class LoginModel {
 			}
 		}
 		return false;
-
 	}
 
 	//Kollar så att cookie uppgifterna stämmer
@@ -57,22 +54,7 @@ class LoginModel {
 			return false;
 		}
 	}
-	
-
-	//Kollar om det inmatade värdena ställer överens med rätt inlogg.
-	public function Checklogin($username, $password){
-		//ANVÄND DETTA PÅ NÅTT SÄTT!	
-		//SELECT * FROM `registernew` WHERE name='Admin'
-		if($username == $this->username && $password == $this->password){
-			$_SESSION["loginstatus"] = $username;
-			$_SESSION["browserstatus"] = $_SERVER['HTTP_USER_AGENT'];
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
+		
 	public function addUser($regusername, $regpassword){
 		try{
 			$db = $this->Repository->connection();
@@ -85,7 +67,33 @@ class LoginModel {
 			return true;
 		}
 		catch(\Exception $e){
-			throw new \Exception("Databas error, troligtvis finns användaren tills jag fixat en check på det!");
+			throw new \Exception("Databas error, Lägga till användare!");
+		}
+	}
+
+	//Kollar om det inmatade värdena stämmer överens med inloggnings uppgifterna
+	public function Checklogin($username, $password){
+		try{
+			$db = $this->Repository->connection();
+			
+			$sql = "SELECT * FROM registernew WHERE name = ? && password = ?";
+			$params = array($username, $password);
+			
+			$query = $db -> prepare($sql);
+			$query -> execute($params);
+			$result = $query -> fetch();
+	
+			if($username == $result['name'] && $password == $result['password']){
+				$_SESSION["loginstatus"] = $username;
+				$_SESSION["browserstatus"] = $_SERVER['HTTP_USER_AGENT'];
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		catch(\Exception $e){
+			throw new \Exception("Databas error, Kolla inloggning!");
 		}
 	}
 	
@@ -95,11 +103,11 @@ class LoginModel {
 			
 			$sql = "SELECT * FROM registernew WHERE name = ?";
 			$params = array($regusername);
+			
 			$query = $db -> prepare($sql);
 			$query -> execute($params);
-
 			$result = $query -> fetch();
-			//var_dump($result);
+			
 			if($result == false){
 				return true;
 			}
@@ -108,7 +116,7 @@ class LoginModel {
 			}
 		}
 		catch(\Exception $e){
-			throw new \Exception("Databas error, kollar om användaren finns!");
+			throw new \Exception("Databas error, Kollar om användaren finns!");
 		}
 	}
 	

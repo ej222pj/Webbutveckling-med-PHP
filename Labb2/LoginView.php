@@ -3,6 +3,7 @@
 class LoginView {
 	private $model;
 	private $message;
+	private $user;
 	private $Uvalue = "";
 	private $Pvalue = "";
 
@@ -31,6 +32,16 @@ class LoginView {
 		else{
 			return false;
 		}
+	}
+	//Sätter vilken person som loggat in
+	public function setUser($username){
+		$ret = $this->user = $username;
+		return $ret;
+	}
+	//Sätter Användarnamn boxen om man lyckas registrera sig
+	public function setUsername($username){
+		$ret = $this->Uvalue = $username;
+		return $ret;
 	}
 
 	//Hämta kaknamnet
@@ -106,6 +117,9 @@ class LoginView {
 
 	//Skriver ut HTMLkod efter om användaren är inloggad eller inte.
 	public function HTMLPage($Message){
+		if(isset($_SESSION['user']) === false){
+			$_SESSION['user'] = $this->user;
+		}
 		$ret = "";
 
 		setlocale(LC_ALL, 'swedish');
@@ -114,7 +128,7 @@ class LoginView {
 
 		if($this->model->loginstatus()){
 			$ret = "<h1>Laborationskod ej222pj</h1>
-					<h2>Admin är inloggad</h2>
+					<h2>" . $_SESSION['user'] . " är inloggad</h2>
 			 		<p>$this->message</p>
 			 		<p>$Message</p>
 					<form method ='post'>

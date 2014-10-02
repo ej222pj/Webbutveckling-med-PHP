@@ -41,7 +41,9 @@ class LoginController {
 			if(strlen($regusername) > 2 && strlen($regpassword) > 5 && $repregpassword == $regpassword){
 				if($this->model->compareUsername($regusername)){
 					if($this->model->addUser($regusername, $regpassword)){
-						$Message = "Registrering av ny användare lyckades";				
+						$Message = "Registrering av ny användare lyckades";		
+						$this->view->setUsername($regusername);		
+						return $this->view->HTMLPage($Message);
 					}
 				}
 				else{
@@ -70,6 +72,7 @@ class LoginController {
 					$Message = "Felaktigt användarnamn och/eller lösenord";
 				}
 				else {
+					$this->view->setUser($username);//Sätter användarnamnet som loggar in
 					//Kollar om användaren vill hålla sig inloggd
 					if($this->view->Checkbox()){
 						$this->view->RememberMe();
