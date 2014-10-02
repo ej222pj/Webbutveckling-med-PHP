@@ -9,8 +9,6 @@ class LoginController {
 	private $registerView;
 	private $model;
 
-	
-	
 	public function __construct() {
 		$this->model = new LoginModel();
 		$this->view = new LoginView($this->model);
@@ -37,6 +35,7 @@ class LoginController {
 		$regpassword = $this->registerView->getPassword();
 		$repregpassword = $this->registerView->getRepPassword();
 		
+		//Kollar om man vill registrera sig. Kollar om allt stämmer.
 		if($this->registerView->didUserPressRegisterNew()){
 			if(strlen($regusername) > 2 && strlen($regpassword) > 5 && $repregpassword == $regpassword){
 				if($this->model->compareUsername($regusername)){
@@ -46,7 +45,7 @@ class LoginController {
 						return $this->view->HTMLPage($Message);
 					}
 				}
-				else{
+				else{//Sätter användarnamnet i Namnboxen
 					$this->registerView->setUsername($regusername);
 					$Message = "Användarnamnet är redan upptaget";
 				}

@@ -54,7 +54,7 @@ class LoginModel {
 			return false;
 		}
 	}
-		
+	//Lägger till användare till en datorbas
 	public function addUser($regusername, $regpassword){
 		try{
 			$db = $this->Repository->connection();
@@ -72,6 +72,7 @@ class LoginModel {
 	}
 
 	//Kollar om det inmatade värdena stämmer överens med inloggnings uppgifterna
+	//Via en databas
 	public function Checklogin($username, $password){
 		try{
 			$db = $this->Repository->connection();
@@ -96,7 +97,7 @@ class LoginModel {
 			throw new \Exception("Databas error, Kolla inloggning!");
 		}
 	}
-	
+	//Kollar om användarnamnet redan finns via en databas och om de gör de lägger inte till en ny.
 	public function compareUsername($regusername){
 		try{
 			$db = $this->Repository->connection();
